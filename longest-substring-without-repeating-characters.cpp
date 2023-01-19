@@ -1,9 +1,10 @@
 #include <iostream>
 #include <set>
+#include <algorithm>
 
 using namespace std;
 
-int lengthOfLongestSubstring(string s) {
+int lengthOfLongestSubstring_slow(string s) {
   int subLength;
   int longestSubLength = 0;
   set<char> charset;
@@ -74,13 +75,38 @@ int lengthOfLongestSubstring(string s) {
 
 }
 
+// optimized using https://www.youtube.com/watch?v=wiGpQwVHdE0s
+int lengthOfLongestSubstring(string s) {
+  set<char> charset;
+  int left = 0;
+  int result = 0;
+
+  // pwwkew
+
+  // going through every single character
+  for (int i = 0; i < s.length(); i++) {
+
+    // if current character is in the character map, update window and charset
+    while (charset.count(s[i])) {
+      // remove left character from the set
+      charset.erase(s[left]);
+      left++;
+    }
+    charset.insert(s[i]);
+    result = max(result, i - left + 1);
+  }
+
+  return result;
+
+}
+
 int main(int argc, char const *argv[]) {
   // string s = "abcabcbb";
-  // string s = "pwwkew";
+  string s = "pwwkew";
   // string s = "auntn";
   // string s = "dvdf";
   // string s = "dvasfdf";
-  string s = "bbb";
+  // string s = "bbb";
 
   cout << lengthOfLongestSubstring(s) << "\n";
 
